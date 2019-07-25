@@ -15,7 +15,7 @@ class Game extends React.Component{
     }
 
     gameLoop = () => {
-        if(this.state.windowLeft > -9155){
+        if(this.state.windowLeft > -7640){
             this.setState({windowLeft: this.state.windowLeft-2})
         }
     }
