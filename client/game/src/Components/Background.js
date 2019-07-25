@@ -2,8 +2,7 @@ import React from 'react'
 
 class Background extends React.Component{
 
-    bgStyle = {        
-        width: `calc(${this.props.windowWidth}px)`, 
+    bgStyle = {
         height: `calc(${this.props.windowHeight}px)`, 
         top: 0,
         left: 0,
