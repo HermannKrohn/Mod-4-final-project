@@ -8,6 +8,9 @@ const io = require('socket.io')(http);
 app.use(bodyParser.json())
 app.use(cors({ origin: 'http://localhost:3000', credentials: true}))
 
+app.get('/characters', (req, res) => {
+    res.send(req.body)
+})
 
 app.post('/characters', (req, res) => {
     res.send(req.body)
