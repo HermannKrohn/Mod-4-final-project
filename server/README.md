@@ -1,0 +1,1 @@
+Server for racing game. Uses Socket.io
