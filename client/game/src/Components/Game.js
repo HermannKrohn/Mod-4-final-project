@@ -37,6 +37,7 @@ class Game extends React.Component{
     //      this.setState({
     //          playerY: this.state.playerY + 10 
     //     })},100)
+    }
 
        
 
