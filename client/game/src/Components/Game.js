@@ -19,7 +19,11 @@ class Game extends React.Component{
         windowWidth: window.innerWidth,
         windowHeight: window.innerHeight,
         playerX: 300,
-        playerY: 700,
+        playerY: 543,
+        speedX: 0,
+        speedY: 0,
+        gravity: 0.05,
+        gravitySpeed: 0,
         playerVelocityY: 0
     }
     jump = (e)=>{
