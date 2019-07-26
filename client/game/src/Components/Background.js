@@ -11,7 +11,6 @@ class Background extends React.Component{
             left: parseInt(`${this.props.windowLeft}`),
             position: 'absolute'        
         };
-
         return <img src={this.props.map} style={bgStyle}/>
     }
 

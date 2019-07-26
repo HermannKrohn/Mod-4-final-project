@@ -1,9 +1,13 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
 class MainMenu extends React.Component{
     render(){
         return(
-            <h1>Main Menu</h1>
+            <div>
+                <h1>Main Menu</h1>
+                <Link to="in-game">Start Game</Link>
+            </div>
         )
     }
 }
