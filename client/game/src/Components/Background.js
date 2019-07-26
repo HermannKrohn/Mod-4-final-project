@@ -11,7 +11,7 @@ class Background extends React.Component{
     };
 
     render(){
-        return <img src={this.props.map} style={this.bgStyle}/>
+        return <img alt=" " src={this.props.map} style={this.bgStyle}/>
     }
 
 }
