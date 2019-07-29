@@ -7,6 +7,7 @@ class MainMenu extends React.Component{
             <div>
                 <h1>Main Menu</h1>
                 <Link to="in-game">Start Game</Link>
+                <Link to="loading-screen">Loading Screen</Link>
             </div>
         )
     }

@@ -15,15 +15,16 @@ class Game extends React.Component{
         windowHeight: window.innerHeight,
         spriteWidth: 100,
         spriteHeight: 100,
-        playerX: 300,
-        playerY: 543,
+        playerX: 150,
+        playerY: 840,
         speedX: 0,
         speedY: 0,
         gravity: 0.05,
         gravitySpeed: 0,
         playerVelocityY: 0,
         windowLeft: 0,
-        windowTop: 0
+        windowTop: 0,
+        mapWidth: 0
     }
     
     jump = (e)=>{
@@ -39,13 +40,20 @@ class Game extends React.Component{
     //     })},100)
     }
 
-       
+    mapMovement = () => {
+        if(this.state.windowLeft > this.state.mapWidth * 0.825){
+            let displayLeft = this.state.windowLeft - (this.state.mapWidth * -0.0009)
+            if(displayLeft < this.state.mapWidth * 0.825){
+                displayLeft = this.state.mapWidth * 0.825
+            }
+            return displayLeft
+        }
+    }
 
     gameLoop = () => {
-        if(this.state.windowLeft > -6560){
-            console.log(this.state.windowLeft)
-            this.setState({windowLeft: this.state.windowLeft-2})
-        }
+        let displayLeft = this.mapMovement()
+
+        this.setState({windowLeft: displayLeft})
     }
 
     updateWindowDimensions = () => {
@@ -53,11 +61,17 @@ class Game extends React.Component{
     }
 
     componentDidMount = () => {
-        this.halfWidth = this.state.spriteWidth / 2;
+        this.halfWidth = this.state.spriteWidth / 2
         this.halfHeight = this.state.spriteHeight / 2
         this.updateWindowDimensions()
         window.addEventListener('resize', this.updateWindowDimensions)
-        this.gameInterval = setInterval(this.gameLoop, FRAMES_PER_SECOND / 1000)
+        this.gameInterval = setInterval(this.gameLoop, 1000/FRAMES_PER_SECOND)
+        let mapImg = document.querySelector(".mapImg")
+        mapImg.onload = () => {
+            let mapWidth = mapImg.getBoundingClientRect().width
+            this.setState({mapWidth: mapWidth*-1})
+        }
+        window.addEventListener('keydown', (e)=>{this.jump(e)})
     }
 
     componentWillUnmount = () => {//useful if have a button to main menu after race
@@ -67,7 +81,6 @@ class Game extends React.Component{
     }
 
     render(){
-        window.addEventListener('keydown', (e)=>{this.jump(e)})
         return(
             <div>
             <Character pullDown={this.pullDown} charImg={mario} centreX={this.state.playerX} centreY={this.state.playerY} 
