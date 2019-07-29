@@ -18,7 +18,6 @@ class Game extends React.Component{
         playerX: 300,
         playerY: 543,
         speedX: 0,
-        speedY: 0,
         gravity: 0.05,
         gravitySpeed: 0,
         playerVelocityY: 0,
@@ -28,22 +27,50 @@ class Game extends React.Component{
     
     jump = (e)=>{
         if (e.key === ' '){
-            console.log(e, 'space')
-
+            // console.log ('spacebar event')
+            // console.log(this.state.playerY)
+            if(this.state.playerY === 543){
+                // console.log ('jumppp')
+                this.setState({
+                    playerVelocityY: 6.5
+                })
+            }
         }
     }
-    pullDown = ()=>{
-    // setInterval(() => {
-    //      this.setState({
-    //          playerY: this.state.playerY + 10 
-    //     })},100)
+    // pullDown = ()=>{
+    //     if (this.state.playerY < 543){
+    //         this.setState({
+    //             playerY: this.state.playerY + 2
+    //        })}
+        
+    // }
+    jumpCalc = () =>{
+        let currY
+        let currYVel
+        currY = this.state.playerY
+        currYVel = this.state.playerVelocityY
+        if (this.state.playerVelocityY > 0){
+            currY = this.state.playerY - this.state.playerVelocityY
+            currYVel = this.state.playerVelocityY - this.state.gravity
+            console.log({playerY: currY, playerVelocityY: currYVel})
+        }
+        if (this.state.playerY < 543 && this.state.playerVelocityY <= 0){
+            currY = this.state.playerY + 2.5
+        }
+        if(this.state.playerY > 543){
+            currY = 543
+            currYVel = 0
+        }
+        
+        return({playerY: currY, playerVelocityY: currYVel})
     }
-
        
 
     gameLoop = () => {
+       let numbers = this.jumpCalc()
+        console.log(numbers)
+        this.setState({playerY: numbers.playerY, playerVelocityY: numbers.playerVelocityY})
         if(this.state.windowLeft > -6560){
-            console.log(this.state.windowLeft)
             this.setState({windowLeft: this.state.windowLeft-2})
         }
     }
@@ -53,6 +80,8 @@ class Game extends React.Component{
     }
 
     componentDidMount = () => {
+    
+        window.addEventListener('keydown', (e)=>{this.jump(e)}) 
         this.halfWidth = this.state.spriteWidth / 2;
         this.halfHeight = this.state.spriteHeight / 2
         this.updateWindowDimensions()
@@ -67,11 +96,10 @@ class Game extends React.Component{
     }
 
     render(){
-        window.addEventListener('keydown', (e)=>{this.jump(e)})
+        
         return(
             <div>
-            <Character pullDown={this.pullDown} charImg={mario} centreX={this.state.playerX} centreY={this.state.playerY} 
-                width={this.spriteWidth} height={this.spriteHeight}/>
+                <Character charImg={mario} centreX={this.state.playerX} centreY={this.state.playerY} width={this.state.spriteWidth} height={this.state.spriteHeight}/>
                 <Background map={map} windowWidth={this.state.windowWidth} windowHeight={this.state.windowHeight} windowLeft={this.state.windowLeft}/>
             </div> 
         )
