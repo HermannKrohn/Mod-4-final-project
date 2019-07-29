@@ -5,10 +5,7 @@ import MainMenu from './Components/MainMenu'
 import LoadingScreen from './Components/LoadingScreen'
 import {BrowserRouter} from 'react-router-dom'
 import {Route} from 'react-router'
-// import socketIO from 'socket.io-client'
-
-// const io = socketIO('http://localhost:3000')
-
+ 
 function App() {
   return (
     <div className="App">

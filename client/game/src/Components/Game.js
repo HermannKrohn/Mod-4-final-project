@@ -4,6 +4,7 @@ import mario from '../Assets/mario-running-gif-1.gif'
 import Background from './Background'
 import Character from './Character';
 import { Link } from 'react-router-dom'
+import { io } from '../Socket'
 
 const FRAMES_PER_SECOND = 60
 
