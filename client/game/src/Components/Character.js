@@ -3,17 +3,6 @@ import './Character.css'
 
 class Character extends Component {
     
-  
-    state = {  }
-    
-    // characterJump(e) {
-    //     if (e.key === " "){
-    //     }
-    //     console.log(e)
-    // }
-    componentDidMount = ()=>{
-       this.props.pullDown()
-    }
     render() { 
         let left = Math.round(this.props.centreX - (this.props.width / 2));
         let top = Math.round(this.props.centreY - (this.props.height / 2));
@@ -23,12 +12,12 @@ class Character extends Component {
             top: `calc(${top}px)`,
             left: `calc(${left}px)`, 
             position: 'absolute',
-            zIndex: 1 
+            zIndex: 10 
         }
        
         return ( 
             <div onKeyDown={(e) => {this.props.pullDown(e)}} tabIndex="0">
-                   <img  style={style} src='https://gifimage.net/wp-content/uploads/2017/10/mario-running-gif-1.gif' alt=" " />      
+                   <img  className="character" style={style} src='https://gifimage.net/wp-content/uploads/2017/10/mario-running-gif-1.gif' alt=" " />      
             </div>
          );
     }
