@@ -30,7 +30,8 @@ io.on('connection', socket => {
     // console.log(io.sockets.adapter.rooms['room-2'].length)
     
     socket.on('disconnect', function() {
-        // console.log('user disconnected: ', this.id);
+        let DCedSocketRoom
+        console.log('user disconnected: ', this.id);
         // console.log("RW: ", io.sockets.adapter.rooms.sockets)//Upon ending room, remove from rooms array
         // let roomWithPlayer = Object.keys(io.sockets.adapter.rooms).find(key => {
         //     if(io.sockets.adapter.rooms[key].sockets)
@@ -38,20 +39,33 @@ io.on('connection', socket => {
         // Object.keys(io.sockets.adapter.rooms).forEach(key => {
         //     console.log("Sockets: ", io.sockets.adapter.rooms[key].sockets)
         // })
+
+        // console.log(io.sockets.adapter.rooms)
+        // DCedSocketRoom = rooms.map( roomObj => {
+        //     if(roomObj.p1 === this.id || roomObj.p2 === this.id){
+        //         return roomObj.roomNum
+        //     }
+        // })
+
+        // console.log("KEY: ", DCedSocketRoom)
+
+        // delete io.sockets.adapter.rooms[DCedSocketRoom];
+
+        // console.log("The One: ", io.sockets.adapter.rooms)
     });
 
     socket.on('findQueue', function() {
         let foundGame = 0;
         let socID = this.id
-        console.log("SOCID: ", socID)
         rooms.forEach(room => {
-            console.log(room.p2)
             if(room.p2 === null){
-                console.log("WE MADE IT")
                 //Join room and start game since queue has two players
                 socket.join(room.roomNum)
                 room.p2 = socID
                 foundGame = 1
+                socket.emit('gameQueue', {
+                    queue: rooms[rooms.length-1].roomNum
+                })
                 io.sockets.in(room.roomNum).emit('startGame');
             }
         })
@@ -63,16 +77,35 @@ io.on('connection', socket => {
                 p1: socID,
                 p2: null
             })
+            socket.emit('gameQueue', {
+                queue: rooms[rooms.length-1].roomNum
+            })
         }
         
         // rooms.forEach(room => {
-        //     console.log(io.sockets.adapter.rooms[room])
+            // console.log(io.sockets.adapter.rooms)
         // })
 
-        console.log("ROOMS")
-        rooms.forEach(room => {
-            console.log(room)
-        })
+        // console.log("ROOMS")
+        // rooms.forEach(room => {
+        //     console.log(room)
+        // })
+    })
+
+    socket.on('playerMovement', function(data){
+        // io.sockets.in(data.queue).broadcast({
+        //     x: data.x,
+        //     y: data.y
+        // })
+        socket.broadcast.to(data.queue).emit('updateOpponent', {
+            x: data.x,
+            y: data.y
+        });
+        // socket.to(data.queue).emit('updateOpponent', {
+        //     x: data.x,
+        //     y: data.y
+        // });
+        // socket.to('game').emit('nice game', "let's play a game")
     })
 })
 

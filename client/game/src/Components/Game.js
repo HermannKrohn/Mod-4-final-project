@@ -1,6 +1,7 @@
 import React from 'react'
 import map from '../Assets/map.png'
 import mario from '../Assets/mario-running-gif-1.gif'
+import luigi from '../Assets/luigi.gif'
 import Background from './Background'
 import Character from './Character';
 import { Link } from 'react-router-dom'
@@ -24,7 +25,18 @@ class Game extends React.Component{
         playerVelocityY: 0,
         windowLeft: 0,
         windowTop: 0,
-        mapWidth: 0
+        mapWidth: 0,
+        opponentSpriteWidth: 100,
+        opponentSpriteHeight: 100,
+        opponentPlayerX: 150,
+        opponentPlayerY: 840,
+        opponentPlayerVelocityY: 0,
+        opponenetSpeedX: 0
+    }
+
+    opponentData = {
+        x: null,
+        y: null
     }
     
     jump = (e)=>{
@@ -54,7 +66,7 @@ class Game extends React.Component{
         if (this.state.playerVelocityY > 0){
             currY = this.state.playerY - this.state.playerVelocityY
             currYVel = this.state.playerVelocityY - this.state.gravity
-            console.log({playerY: currY, playerVelocityY: currYVel})
+            // console.log({playerY: currY, playerVelocityY: currYVel})
         }
         if (this.state.playerY < 543 && this.state.playerVelocityY <= 0){
             currY = this.state.playerY + 2.5
@@ -81,7 +93,14 @@ class Game extends React.Component{
         let displayLeft = this.mapMovement()
         let numbers = this.jumpCalc()
 
-        this.setState({windowLeft: displayLeft, playerY: numbers.playerY, playerVelocityY: numbers.playerVelocityY})
+        io.emit('playerMovement', {
+            x: this.state.playerX,
+            y: numbers.playerY,
+            queue: this.props.match.params.queue
+        })
+
+        this.setState({windowLeft: displayLeft, playerY: numbers.playerY, playerVelocityY: numbers.playerVelocityY,
+            opponentPlayerX: this.opponentData.x, opponentPlayerY: this.opponentData.y})
     }
 
     updateWindowDimensions = () => {
@@ -89,7 +108,7 @@ class Game extends React.Component{
     }
 
     componentDidMount = () => {
-    
+        // console.log(this.props.match.params.queue)
         window.addEventListener('keydown', (e)=>{this.jump(e)}) 
         this.halfWidth = this.state.spriteWidth / 2;
         this.halfHeight = this.state.spriteHeight / 2
@@ -102,6 +121,13 @@ class Game extends React.Component{
             this.setState({mapWidth: mapWidth*-1})
         }
         window.addEventListener('keydown', (e)=>{this.jump(e)})
+        io.on('updateOpponent', data => {
+            this.opponentData = {
+                x: data.x,
+                y: data.y
+            }
+            console.log("OP: ", this.opponentData)
+        })
     }
 
     componentWillUnmount = () => {//useful if have a button to main menu after race
@@ -115,6 +141,7 @@ class Game extends React.Component{
         return(
             <div>
                 <Character charImg={mario} centreX={this.state.playerX} centreY={this.state.playerY} width={this.state.spriteWidth} height={this.state.spriteHeight}/>
+                <Character charImg={luigi} centreX={this.state.opponentPlayerX} centreY={this.state.opponentPlayerY} width={this.state.opponentSpriteWidth} height={this.state.opponentSpriteHeight}/>
                 <Background map={map} windowWidth={this.state.windowWidth} windowHeight={this.state.windowHeight} windowLeft={this.state.windowLeft}/>
             </div> 
         )
