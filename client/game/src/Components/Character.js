@@ -16,7 +16,7 @@ class Character extends Component {
         }
        
         return ( 
-            <div onKeyDown={(e) => {this.props.pullDown(e)}} tabIndex="0">
+            <div tabIndex="0">
                    <img  className="character" style={style} src='https://gifimage.net/wp-content/uploads/2017/10/mario-running-gif-1.gif' alt=" " />      
             </div>
          );
