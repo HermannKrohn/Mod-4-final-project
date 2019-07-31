@@ -114,14 +114,13 @@ class Game extends React.Component{
 
     collisionDetecter = () => {
         let answer
-        let j
         for(let i in Data){
-            if(Data[i].coordX < this.state.playerMapX + this.state.playerHitWidth &&
-                Data[i].coordX + Data[i].width > this.state.playerMapX &&
-                Data[i].coordY < this.state.playerY + this.state.playerHitHeight &&
-                Data[i].coordY + Data[i].height > this.state.playerY){
-                    if (Data[i].coordX < this.state.playerMapX + this.state.playerHitWidth &&
-                        Data[i].coordY < this.state.playerY + this.state.playerHitHeight){
+            if((Data[i].coordX* this.state.mapWidth *-1) < this.state.playerMapX + this.state.playerHitWidth &&
+                (Data[i].coordX* this.state.mapWidth *-1) + (Data[i].width * this.state.mapWidth *-1)> this.state.playerMapX &&
+                (Data[i].coordY*this.state.mapHeight) < this.state.playerY + this.state.playerHitHeight &&
+                (Data[i].coordY*this.state.mapHeight) + (Data[i].height*this.state.mapHeight) > this.state.playerY){
+                    if ((Data[i].coordX* this.state.mapWidth *-1)< this.state.playerMapX + this.state.playerHitWidth &&
+                    (Data[i].coordY*this.state.mapHeight) < this.state.playerY + this.state.playerHitHeight){
                             this.gravity = 0
                             
                     } else {
@@ -136,7 +135,6 @@ class Game extends React.Component{
                     this.gravity = 20
                 }
             }
-            
             return answer
     }
 
