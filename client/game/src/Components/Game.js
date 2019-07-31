@@ -28,13 +28,16 @@ class Game extends React.Component{
         playerVelocityY: 0,
         windowLeft: 0,
         windowTop: 0,
-        mapWidth: 0,
+        mapWidth:0,
         opponentSpriteWidth: 100,
         opponentSpriteHeight: 100,
         opponentPlayerX: 150,
         opponentPlayerY: 840,
         opponentPlayerVelocityY: 0,
-        opponenetSpeedX: 0
+        opponenetSpeedX: 0,
+        calculations: true,
+        playerHitWidth: 33,
+        playerHitHeight: 70
     }
 
     opponentData = {
@@ -55,6 +58,7 @@ class Game extends React.Component{
     }
 
     jumpCalc = () =>{
+
         let currY
         let currYVel
         let currMapX
@@ -82,7 +86,6 @@ class Game extends React.Component{
         if (this.state.playerY < 0.15*this.state.mapHeight){//max height
             currYVel = 0
         }
-
         return({playerY: currY, playerVelocityY: currYVel, playerMapX: currMapX})
     }
 
@@ -108,21 +111,22 @@ class Game extends React.Component{
         let displayLeft = this.state.windowLeft
         let currMapX = this.state.playerMapX
         if(this.state.windowLeft > this.state.mapWidth * 0.825){
+           
             displayLeft = this.state.windowLeft - (this.state.mapWidth * -0.0009)
             currMapX = this.state.playerMapX - (this.state.mapWidth * 0.0009)
             if(displayLeft < this.state.mapWidth * 0.825){
                 displayLeft = this.state.mapWidth * 0.825
             }
         } else {
+            // console.log(this.state.windowLeft,  this.state.mapWidth)
             this.win()
         }
         return ({displayLeft: displayLeft, playerMapX: currMapX})
     }
 
     collisionDetecter = () => {
-        // let answer
-        // let j
         for(let i in Data){
+            
             const objectLeftSide = Data[i].coordX
             const objectRightSide = Data[i].coordX + Data[i].width
             const objectTop = Data[i].coordY
@@ -134,7 +138,7 @@ class Game extends React.Component{
             const playerBottom = this.state.playerY + this.state.playerHitHeight
 
             const xVelocity = this.state.mapWidth * -0.0009
-            const yVelocity = Math.abs(this.playerVelocityY)
+            const yVelocity = Math.abs(this.state.playerVelocityY)
 
             const xAligned = (
                 (objectLeftSide < playerLeftSide && playerLeftSide < objectRightSide && playerRightSide > objectRightSide)
@@ -158,12 +162,18 @@ class Game extends React.Component{
 
             const colliding =  xAligned && yAligned
 
+            const theGround = 0.543*this.state.mapHeight 
+
+            const falling = (
+                yVelocity == 0 
+                    &&
+                playerTop != theGround
+            )
             
             let collidingTop = (
                 colliding 
                     &&
-                // yVelocity > xVelocity
-                (objectTop < playerBottom && playerBottom < objectBottom && playerTop < objectTop)
+                falling
             )
             
             const collidingSide = (
@@ -172,11 +182,6 @@ class Game extends React.Component{
                 xVelocity > yVelocity
             )
 
-            // if(collidingSide){
-            //     collidingTop = false
-            // }
-
-            if(colliding) console.log(xVelocity, yVelocity)
             if(colliding){
                 if(collidingTop){
                         console.log("COLLIDING TOP")
@@ -214,7 +219,7 @@ class Game extends React.Component{
         let displayLeft = this.collisionDetecter() ? this.mapMovement() : {displayLeft: this.state.windowLeft, playerMapX: this.state.playerMapX } 
         let numbers = this.state.calculations ? this.jumpCalc() : {playerY: this.state.playerY, playerVelocityY: this.state.playerVelocityY}
         io.emit('playerMovement', {
-            x: this.state.playerX,
+            x: displayLeft.playerMapX,
             y: numbers.playerY,
             queue: this.props.match.params.queue
         })
@@ -305,12 +310,15 @@ class Game extends React.Component{
         this.halfHeight = this.state.spriteHeight / 2
         this.updateWindowDimensions()
         window.addEventListener('resize', this.updateWindowDimensions)
-        this.gameInterval = setInterval(this.gameLoop, 1000/FRAMES_PER_SECOND)
+       
         let mapImg = document.querySelector(".mapImg")
         mapImg.onload = () => {
             let mapHeight= mapImg.getBoundingClientRect().height
             let mapWidth = mapImg.getBoundingClientRect().width
-            this.setState({mapWidth: mapWidth*-1, mapHeight: mapHeight, playerX: 0.10416666666666667*window.innerWidth, playerY: mapHeight * 0.543, playerMapX: mapWidth * 0.01815141702118653})
+            this.setState({mapWidth: mapWidth*-1, mapHeight: mapHeight, playerX: 0.10416666666666667*window.innerWidth, playerY: mapHeight * 0.543, playerMapX: mapWidth * 0.01815141702118653}, 
+                () => {
+                    this.gameInterval = setInterval(this.gameLoop, 1000/FRAMES_PER_SECOND)
+                })
             
         }
         window.addEventListener('keydown', (e)=>{this.jump(e)})
