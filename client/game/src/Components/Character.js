@@ -17,7 +17,7 @@ class Character extends Component {
        
         return ( 
             <div onKeyDown={(e) => {this.props.pullDown(e)}} tabIndex="0">
-                   <img  className="character" style={style} src={this.props.charImg} alt=" " />      
+                   <img className="character" style={style} src={this.props.charImg} alt=" " />      
             </div>
          );
     }

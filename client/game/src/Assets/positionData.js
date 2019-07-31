@@ -1,0 +1,33 @@
+let Data = [
+    {width: 79, height: 133, coordX: 995, coordY: 587},
+    {width: 45, height: 41, coordX: 1178, coordY: 256},
+    {width: 43, height: 45, coordX: 1179, coordY: 447},
+    {width: 43, height: 43, coordX: 3014, coordY: 258},
+    {width: 43, height: 42, coordX: 3109, coordY: 256},
+    {width: 41, height: 41, coordX: 3015, coordY: 445},
+    {width: 42, height: 42, coordX: 3110, coordY: 445},
+    {width: 186, height: 44, coordX: 4238, coordY: 447},
+    {width: 45, height: 138, coordX: 4849, coordY: 587},
+    {width: 80, height: 178, coordX: 5467, coordY: 586},
+    {width: 79, height: 181, coordX: 6221, coordY: 589},
+    {width: 371, height: 42, coordX: 6874, coordY: 446},
+    {width: 182, height: 42, coordX: 6968, coordY: 257},
+    {width: 81, height: 85, coordX: 7678, coordY: 586},
+    {width: 40, height: 134, coordX: 8901, coordY: 587}
+    // {width: 85, height: 136, coordX: 1033.5, coordY: 519},
+    // {width: 43, height: 42, coordX: 1199.5, coordY: 234},
+    // {width: 44, height: 40, coordX: 1200, coordY: 426},
+    // {width: 42, height: 41, coordX: 3035, coordY: 236.5},
+    // {width: 44, height: 43, coordX: 3036, coordY: 423.5},
+    // {width: 45, height: 43, coordX: 3129.5, coordY: 236.5},
+    // {width: 42, height: 41, coordX: 3131, coordY: 424.5},
+    // {width: 183, height: 42, coordX: 4331.5, coordY: 425},
+    // {width: 45, height: 140, coordX: 4872.5, coordY: 518},
+    // {width: 90, height: 184, coordX: 5505, coordY: 494},
+    // {width: 89, height: 182, coordX: 6257.5, coordY: 494},
+    // {width: 372, height: 41, coordX: 7060, coordY: 424.5},
+    // {width: 184, height: 42, coordX: 7060, coordY: 236},
+    // {width: 87, height: 90, coordX: 7717.5, coordY: 541},
+    // {width: 45, height: 138, coordX: 8918.5, coordY: 517}
+]
+export default Data
