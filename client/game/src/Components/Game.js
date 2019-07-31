@@ -36,7 +36,7 @@ class Game extends React.Component{
     }
     
     gravity = 20
-    playerVelocity = 0
+    playerVelocityY = 0
     jump = (e)=>{
         if (e.key === ' '){
             // if(this.state.playerY === 0.543*this.state.mapHeight){
@@ -113,33 +113,96 @@ class Game extends React.Component{
     }
 
     collisionDetecter = () => {
-        let answer
-        let j
+        // let answer
+        // let j
         for(let i in Data){
-            if(Data[i].coordX < this.state.playerMapX + this.state.playerHitWidth &&
-                Data[i].coordX + Data[i].width > this.state.playerMapX &&
-                Data[i].coordY < this.state.playerY + this.state.playerHitHeight &&
-                Data[i].coordY + Data[i].height > this.state.playerY){
-                    if (Data[i].coordX < this.state.playerMapX + this.state.playerHitWidth &&
-                        Data[i].coordY < this.state.playerY + this.state.playerHitHeight){
-                            this.gravity = 0
-                            
-                    } else {
-                        this.gravity = 20
-                        
-                    }
-                    answer = false
-                    break
-                    
-                } else{
-                    answer = true
-                    this.gravity = 20
+            const objectLeftSide = Data[i].coordX
+            const objectRightSide = Data[i].coordX + Data[i].width
+            const objectTop = Data[i].coordY
+            const objectBottom = Data[i].coordY + Data[i].height
+
+            const playerLeftSide = this.state.playerMapX
+            const playerRightSide = this.state.playerMapX + this.state.playerHitWidth 
+            const playerTop = this.state.playerY
+            const playerBottom = this.state.playerY + this.state.playerHitHeight
+
+            const xVelocity = this.state.mapWidth * -0.0009
+            const yVelocity = Math.abs(this.playerVelocityY)
+
+            const xAligned = (
+                (objectLeftSide < playerLeftSide && playerLeftSide < objectRightSide && playerRightSide > objectRightSide)
+                    ||
+                (objectLeftSide < playerRightSide && playerRightSide < objectRightSide && playerLeftSide < objectLeftSide)
+                    ||
+                (playerLeftSide < objectLeftSide && objectRightSide < playerRightSide)
+                    ||
+                (playerLeftSide > objectLeftSide && playerRightSide < objectRightSide)
+            )
+
+            const yAligned = (
+                (objectTop < playerTop && playerTop < objectBottom && objectBottom < playerBottom)
+                    ||
+                (objectTop < playerBottom && playerBottom < objectBottom && playerTop < objectTop)
+                    ||
+                (playerTop < objectTop && objectBottom < playerBottom)
+                    ||
+                (objectTop < playerTop && playerBottom < objectBottom)
+            )
+
+            const colliding =  xAligned && yAligned
+
+            
+            let collidingTop = (
+                colliding 
+                    &&
+                // yVelocity > xVelocity
+                (objectTop < playerBottom && playerBottom < objectBottom && playerTop < objectTop)
+            )
+            
+            const collidingSide = (
+                colliding 
+                    &&
+                xVelocity > yVelocity
+            )
+
+            // if(collidingSide){
+            //     collidingTop = false
+            // }
+
+            if(colliding) console.log(xVelocity, yVelocity)
+            if(colliding){
+                if(collidingTop){
+                        console.log("COLLIDING TOP")
+                        this.gravity = 0
+                        return true
+                }else if(collidingSide){
+                        console.log("COLLIDING SIDE")
+                        return false
+                 }else{
+                    console.log("NO COLLISION")
+                    this.gravity = 20 
                 }
             }
+        }
             
-            return answer
+            // for(let i in Data){
+            //     if(Data[i].coordX < this.state.playerMapX + this.state.playerHitWidth &&
+            //             Data[i].coordY < this.state.playerY + this.state.playerHitHeight){
+            //                 return false
+            //     }else if(Data[i].coordX < this.state.playerMapX + this.state.playerHitWidth && 
+            //             Data[i].coordX + Data[i].width > this.state.playerMapX &&
+            //             Data[i].coordY < this.state.playerY + this.state.playerHitHeight){
+            //                 this.gravity = 0
+            //                 return true
+            //     }else{
+            //         this.gravity = 20 
+            //         // return true
+            //     }
+            // }
+            this.gravity = 20 
+            return true
+            // return answer
     }
-
     gameLoop = () => {
         let displayLeft = this.collisionDetecter() ? this.mapMovement() : {displayLeft: this.state.windowLeft, playerMapX: this.state.playerMapX } 
         let numbers = this.state.calculations ? this.jumpCalc() : {playerY: this.state.playerY, playerVelocityY: this.state.playerVelocityY}
